@@ -1,7 +1,7 @@
 from google import genai
 from google.genai import types
 
-GEMINI_API_KEY= #"AIzaSyDYwC1ZSauaI6r6RuxXLNc8zn42gVkynwI"
+GEMINI_API_KEY= "AIzaSyDYwC1ZSauaI6r6RuxXLNc8zn42gVkynwI"
 #genai.configure(api_key=GEMINI_API_KEY)
 #model = genai.GenerativeModel("gemini-pro")
 
@@ -9,9 +9,13 @@ client = genai.Client(api_key=GEMINI_API_KEY)
 MODEL_ID = "gemini-2.0-flash"
 
 
+height = 180 #cm
+weight = 500 #lbs
+age = 20 #years
+gender = "male"
 
-option = "loseWeight" #edit this based on the exercise plan they want generated
-basicPrompt = "My height is 180 cm, my weight is 150 lbs, I'm 25 years old, and my gender is male" # edit this for  to include user input
+option = "gainWeight" #edit this based on the exercise plan they want generated
+basicPrompt = f"My height is {height} cm, my weight is {weight} lbs, I'm {age} years old, and my gender is {gender}" # edit this for  to include user input
 if option == "loseWeight":
     prompt = basicPrompt + "Give me a fitness plan to help me lose weight."
 elif option == "gainWeight":
@@ -29,11 +33,28 @@ else:
 
 # system_instruction - might need to add more context, Might want to follow the US Health Guidlines
 system_instruction = """
-Your a well known fitness trainer, who is able to generate a fitness plan given all the person's measurements
+Your a smart fitness trainer, who able to generate a workout plan only if they have an appropriate body type.
 """
+funny_instruction = """
+Your a smart fitness trainer, who able to generate a workout plan only if they have an appropriate body type.
+You are still training a human but you need to talk as if they are zombie, to keep them engaged. 
+"""
+
+safety_settings = [
+    types.SafetySetting(
+        category="HARM_CATEGORY_DANGEROUS_CONTENT",
+        threshold="BLOCK_LOW_AND_ABOVE",
+    )
+]
+
+
 chat_config =types.GenerateContentConfig(
     system_instruction=system_instruction,
-    temperature=0.5,
+    temperature=0.5,  #Creativity of the response
+    safety_settings=safety_settings,
+    #max_output_tokens=200,    #Length of the response
+    #top_p=0.95,
+    #top_k=20,
 )
 chat = client.chats.create(
     model=MODEL_ID,
