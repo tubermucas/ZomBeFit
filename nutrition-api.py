@@ -30,10 +30,10 @@ class NutritionLog(BaseModel):
     userId: int
     id: int
     date: str
-    fat: float
-    protein: float
-    carbs: float
-    calIn: float
+    fat: list[float]
+    protein: list[float]
+    carbs: list[float]
+    calIn: list[float]
     calOut: float
 
     def to_dict(self):
