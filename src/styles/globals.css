@@ -1,0 +1,38 @@
+@import "tailwindcss";
+@import "flowbite/src/themes/default";
+@custom-variant dark (&:where(.dark, .dark *));
+@plugin "flowbite/plugin";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background-image: url("/jr-korpa-_ZNLoTRTEKs-unsplash.jpg")!important;
+  background-size: cover; /* Ensures the image covers the entire screen */
+  background-position: center; /* Centers the image */
+  background-repeat: no-repeat; /* Prevents the image from repeating */
+  background-attachment: fixed; /* Keeps the background fixed during scrolling */
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+}

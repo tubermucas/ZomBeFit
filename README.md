@@ -20,3 +20,7 @@ We gained hands-on experience with database management and CRUD operations using
 
 # What's next for ZomBeFit
 At ZombeFit, we recognize that health monitoring is essential — even in the afterlife. That’s why we’re introducing two upcoming tools designed to work seamlessly with our platform: Fitbitten, our motion tracker tailored for undead movement, and FlatlineFlex, a heart monitor built for zombies whose hearts may have stopped, but their gains haven't
+
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+
+Dashborad design inspired by Flowbite
