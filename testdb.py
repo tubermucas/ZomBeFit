@@ -1,28 +1,28 @@
 from pymongo import MongoClient
+from datetime import datetime
 
 # Replace with your actual MongoDB Atlas connection string
-uri = "mongodb+srv://tubermucas:npBRMnKt9rqqNvpw@cluster.dnqkulb.mongodb.net/?retryWrites=true&w=majority"
-
-# Connect to MongoDB Atlas
-client = MongoClient(uri)
-
-# Create or access a database
+#uri = "mongodb+srv://tubermucas:npBRMnKt9rqqNvpw@cluster.dnqkulb.mongodb.net/?retryWrites=true&w=majority"
+client = MongoClient("mongodb+srv://tubermucas:npBRMnKt9rqqNvpw@cluster.dnqkulb.mongodb.net/?retryWrites=true&w=majority")
 db = client["all_data"]
+users_collection = db["user"]
 
-# Create or access a collection
-collection = db["users"]
-
-# Insert one document into the collection
-food_item = {
-    "userId": 1,
-    "id": 1,
-    "date": "2025-04-12",
-    "fat": 56,
-    "protein": 34,
-    "carbs": 134,
-    "calIn": 2000,
-    "calOut": 2500,
+# Data to insert
+new_user_data = {
+    "userId": "user123",
+    "gender": "male",
+    "age": 21,
+    "weight": 165,
+    "height": 70,
+    "activityLvl": "moderate",
+    "fatLogs": [{"date": "2025-04-10", "value": 60.0}],
+    "proteinLogs": [{"date": "2025-04-10", "value": 120.0}],
+    "carbsLogs": [{"date": "2025-04-10", "value": 200.0}],
+    "calInLogs": [{"date": "2025-04-10", "value": 1800}],
+    "calOutLogs": [{"date": "2025-04-10", "value": 2200}],
+    "dateCreated": datetime.utcnow().isoformat()  # Convert datetime to ISO string
 }
-result = collection.insert_one(food_item)
 
-print("Inserted document ID:", result.inserted_id)
+# Insert the document
+result = users_collection.insert_one(new_user_data)
+print(f"User inserted with id: {result.inserted_id}")

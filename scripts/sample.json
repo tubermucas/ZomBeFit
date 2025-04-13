@@ -1,0 +1,13 @@
+{
+  "userId": "user123",
+  "gender": "male",
+  "age": 21,
+  "weight": 165,
+  "height": 70,
+  "activityLvl": "moderate",
+  "fatLogs": [],
+  "proteinLogs": [],
+  "carbsLogs": [],
+  "calInLogs": [],
+  "calOutLogs": []
+}

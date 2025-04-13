@@ -11,6 +11,7 @@ import os #access environment variables
 from dotenv import load_dotenv #load environment variables from .env file
 from algorithms import tdee
 from datetime import datetime #for handling date and time
+from typing import Optional
 #load the environment variables
 load_dotenv()
 
@@ -21,7 +22,7 @@ client = MongoClient(os.getenv("MONGO_URI"))
 #access a specific database in the MongoDB cluster
 db = client["all_data"]
 #create a collection object from the selected database
-collection = db["users"]
+collection = db["user"]
 
 #create the FastAPI App
 app = FastAPI()
@@ -31,7 +32,7 @@ class NutritionLog(BaseModel):
     #user information
     _id: object #might not need?
     userId: str
-    dateCreated: datetime
+    
     gender: str
     age: float
     weight: float
@@ -42,12 +43,17 @@ class NutritionLog(BaseModel):
     proteinLogs: list[dict]
     carbsLogs: list[dict]
     calInLogs: list[dict]
-    calOutLogs: list[dict] | None = None  # This line declares calOutLogs can be either a list of dicts OR None, and defaults it to None
+    calOutLogs: list[dict]
+
+    dateCreated: Optional[datetime]
     
-    #create a constructor to initialize the calOut field
-    def __init__(self, **data): #**data is a dictionary of the data from the request
-        super().__init__(**data)
-        self.calOut = [{'date': self.dateCreated, 'calOut': tdee(self.gender, self.age, self.weight, self.height, self.activityLvl)}]
+    #calculate the tdee
+    @property
+    def calOut(self) -> Optional[float]:
+        # Calculate calOut using the `tdee` function from `algorithms.py`
+        if self.gender and self.age and self.weight and self.height and self.activityLvl:
+            return tdee(self.gender, self.age, self.weight, self.height, self.activityLvl)
+        return None
 
     def to_dict(self):
         return {
