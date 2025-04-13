@@ -109,7 +109,7 @@ def generateUserPlan(user: UserInput):
     system_instruction = """
     Your a smart fitness trainer, who able to generate a workout plan only if they have an appropriate body type.
     """
-    if user_data.funny:
+    if user.funny:
         system_instruction = """
         Your a smart fitness trainer, who able to generate a workout plan only if they have an appropriate body type.
         You are still training a human but you need to talk as if they are zombie, to keep them engaged. 
