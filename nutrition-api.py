@@ -81,13 +81,13 @@ def readAllLogs():
     return logs
 
 #get a specific log by its id
-@app.get("/logs/{log_id}", response_model=NutritionLog) 
-def readLog(log_id: int = Path(..., description="The ID of the item you'd like to get")): #use a type hint and Path()
+@app.get("/logs/{user_id}", response_model=NutritionLog) 
+def readLog(user_id: str = Path(..., description="The ID of the user you'd like to get")): #use a type hint and Path()
     #gather a specific document by its id
     #This line queries the MongoDB collection to find a single document
     #where the "id" field matches log_id
     #The {"_id": 0} parameter excludes MongoDB's internal _id field from the result
-    log = collection.find_one({"id": log_id}, {"_id": 0}) #query filters
+    log = collection.find_one({"user_id": user_id}, {"_id": 0}) #query filters
     #if there is a log return it
     if log:
         return log
@@ -97,41 +97,45 @@ def readLog(log_id: int = Path(..., description="The ID of the item you'd like t
 #route to add data to the API
 @app.post("/logs", response_model=NutritionLog)
 def addLog(log: NutritionLog):
-    #get the last log by id
-    last_log = collection.find_one(sort=[("id", -1)])
-    #create a new id for the new log
-    if last_log:
-        new_id = last_log["id"] + 1
-    else:
-        new_id = 1
-    #set the new logs id to the new id
-    log.id = new_id
-    #add the new log to the collection with insert_one
-    collection.insert_one(log.to_dict())
+    ##get the last log by id
+    #last_log = collection.find_one(sort=[("id", -1)])
+    ##create a new id for the new log
+    #if last_log:
+    #    new_id = last_log["id"] + 1
+    #else:
+    #    new_id = 1
+    ##set the new logs id to the new id
+    #log.id = new_id
+    ##add the new log to the collection with insert_one
+    #collection.insert_one(log.to_dict())
+    #convert the log to a dictionary
+    log_dict = log.to_dict()
+    #add the new log to the collection with insert_one, using userId
+    collection.insert_one({"userId": log.userId, **log_dict})
     #return the new log
     return log
         
 #route to update data in the API
-@app.put("/logs/{log_id}", response_model=NutritionLog)
-def updateLog(log_id: int, updatedLog: NutritionLog):
+@app.put("/logs/{user_id}", response_model=NutritionLog)
+def updateLog(user_id: str, updatedLog: NutritionLog):
     #check if the log exists
-    existing_log = collection.find_one({"id": log_id})
+    existing_log = collection.find_one({"user_id": user_id})
     #if the log doesnt exist
     if not existing_log:
         #raise an error
         raise HTTPException(status_code=404, detail="Log not found")
     #update the existing log with the new log
-    collection.update_one({"id": log_id}, {"$set": updatedLog.to_dict()})
-    #update the log id to the log_id
-    updatedLog.id = log_id
+    collection.update_one({"user_id": user_id}, {"$set": updatedLog.to_dict()})
+    #update the log id to the user_id
+    updatedLog.id = user_id
     #return the updated log
     return updatedLog
 
 #route to delete data in the API
-@app.delete("/logs/{log_id}")
-def deleteLog(log_id: int):
-    #delete a log by its id
-    deleteLog = collection.delete_one({"id": log_id})
+@app.delete("/logs/{user_id}")
+def deleteLog(user_id: str):
+    #delete a log by its user_id
+    deleteLog = collection.delete_one({"user_id": user_id})
     #check if the log was deleted
     if deleteLog.deleted_count > 0:
         #return a message that the log was deleted
