@@ -9,6 +9,7 @@ import uvicorn #web server that allows API to run
 from pymongo import MongoClient #MongoDB client
 import os #access environment variables
 from dotenv import load_dotenv #load environment variables from .env file
+from algorithms import tdee
 
 #load the environment variables
 load_dotenv()
@@ -30,11 +31,21 @@ class NutritionLog(BaseModel):
     userId: int
     id: int
     date: str
-    fat: float
-    protein: float
-    carbs: float
-    calIn: float
+    gender: str
+    age: int
+    weight: int
+    height: int
+    activityLvl: str
+    fat: list[float]
+    protein: list[float]
+    carbs: list[float]
+    calIn: list[float]
     calOut: float
+
+    #create a constructor to initialize the calOut field
+    def __init__(self, **data): #**data is a dictionary of the data from the request
+        super().__init__(**data)
+        self.calOut = tdee(self.gender, self.age, self.weight, self.height, self.activityLvl)
 
     def to_dict(self):
         return {
