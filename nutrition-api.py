@@ -90,11 +90,17 @@ def addLog(log: NutritionLog):
 #route to update data in the API
 @app.put("/logs/{log_id}", response_model=NutritionLog)
 def updateLog(log_id: int, updatedLog: NutritionLog):
+    #check if the log exists
     existing_log = collection.find_one({"id": log_id})
+    #if the log doesnt exist
     if not existing_log:
+        #raise an error
         raise HTTPException(status_code=404, detail="Log not found")
+    #update the existing log with the new log
     collection.update_one({"id": log_id}, {"$set": updatedLog.to_dict()})
+    #update the log id to the log_id
     updatedLog.id = log_id
+    #return the updated log
     return updatedLog
 
 #route to delete data in the API
