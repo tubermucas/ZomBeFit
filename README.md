@@ -1,7 +1,7 @@
 # ZomBeFit
 
 # Contributors:
-Jesse Simmons, Logan Pinel, Temirzhan Mukhambet, Tommy Le
+Jesse Simmons, Logan Pinel, Temirzhan Mukhambet, Tommy Le :)
 
 # Inspiration
 You ever seen those zombie movies where the zombies are just to slow at chasing people or just too fat from eating too many people. Well, we thought zombies could be so much better if they actually started exercise. That's why we made ZomBefit. Whether you’re alive or… not-so-alive, ZomBeFit is here to help you track progress, stay motivated, and resurrect your routine.
