@@ -67,6 +67,6 @@ const userDataSchema = new mongoose.Schema({
 });
 
 // Create a model for the schema
-const UserData = mongoose.model('UserData', userDataSchema);
+const UserData = mongoose.model('users', userDataSchema);
 
 export default UserData;

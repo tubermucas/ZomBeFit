@@ -1,0 +1,17 @@
+{
+    "userId": "6619d7e21a4cfbe67c123abc",
+    "caloriesIn": 1800,
+    "caloriesOut": 2200,
+    "height": 70,
+    "weight": 165,
+    "age": 21,
+    "gender": "Male",
+    "bodyFatPercentage": 15,
+    "fatGrams": 60,
+    "proteinGrams": 130,
+    "carbsGrams": 200,
+    "goal": "Lose weight",
+    "targetWeight": 150,
+    "targetBodyFatPercentage": 12
+  }
+  
