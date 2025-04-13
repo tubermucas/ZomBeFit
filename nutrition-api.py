@@ -16,11 +16,11 @@ load_dotenv()
 #connect to the MongoDB database
 #create a client object to connect to the MongoDB database
 #client object acts as a dictionary where you can use the database name as the key
-client = MongoClient(os.getenv("MONGODB_URI"))
+client = MongoClient(os.getenv("MONGO_URI"))
 #access a specific database in the MongoDB cluster
-db = client["database"]
+db = client["all_data"]
 #create a collection object from the selected database
-collection = db["userdata"]
+collection = db["users"]
 
 #create the FastAPI App
 app = FastAPI()
@@ -90,16 +90,12 @@ def addLog(log: NutritionLog):
 #route to update data in the API
 @app.put("/logs/{log_id}", response_model=NutritionLog)
 def updateLog(log_id: int, updatedLog: NutritionLog):
-    #update the existing log with the new log
+    existing_log = collection.find_one({"id": log_id})
+    if not existing_log:
+        raise HTTPException(status_code=404, detail="Log not found")
     collection.update_one({"id": log_id}, {"$set": updatedLog.to_dict()})
-    #check if there are any modified documents
-    if collection.modified_count > 0:
-        #give the updated log the same id as the log_id
-        updatedLog.id = log_id
-        #return the updated log
-        return updatedLog
-    #if no documents are modified return a 404 error
-    raise HTTPException(status_code=404, detail="Log not found")
+    updatedLog.id = log_id
+    return updatedLog
 
 #route to delete data in the API
 @app.delete("/logs/{log_id}")
@@ -115,4 +111,4 @@ def deleteLog(log_id: int):
 
 #run the api
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="127.0.0.1", port=8000)

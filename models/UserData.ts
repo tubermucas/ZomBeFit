@@ -54,11 +54,11 @@ const userDataSchema = new mongoose.Schema({
   },
   targetWeight: {
     type: Number,
-    required: false,
+    required: true,
   },
   targetBodyFatPercentage: {
     type: Number,
-    required: false,
+    required: true,
   },
   dateCreated: {
     type: Date,

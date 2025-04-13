@@ -7,7 +7,16 @@ const router = express.Router();
 
 // Sign-Up Route (Create new user)
 router.post('/signup', async (req: Request, res: Response) => {
-  const { username, email, password } = req.body;
+  const { email, password } = req.body;
+
+  // email and password validation 
+  if (!email || !/\S+@\S+\.\S+/.test(email)) {
+    return res.status(400).json({ message: 'Invalid email format' });
+  }
+  if (!password || password.length < 6) {
+    return res.status(400).json({ message: 'Password must be at least 6 characters' });
+  }
+  
 
   try {
     // Check if user exists
@@ -20,7 +29,6 @@ router.post('/signup', async (req: Request, res: Response) => {
 
     // Create and save new user
     const newUser = new User({
-      username,
       email,
       password: hashedPassword,
     });
@@ -47,9 +55,9 @@ router.post('/signin', async (req: Request, res: Response) => {
     if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
 
     // Generate JWT token
-    const token = jwt.sign({ id: user._id }, 'your_jwt_secret', { expiresIn: '1h' });
-
-    res.json({ token });
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET!, { expiresIn: '1h' });
+    
+    res.status(200).json({ token, userId: user._id });
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
   }

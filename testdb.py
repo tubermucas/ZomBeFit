@@ -7,10 +7,10 @@ uri = "mongodb+srv://tubermucas:npBRMnKt9rqqNvpw@cluster.dnqkulb.mongodb.net/?re
 client = MongoClient(uri)
 
 # Create or access a database
-db = client["nutrition_db"]
+db = client["all_data"]
 
 # Create or access a collection
-collection = db["food_items"]
+collection = db["users"]
 
 # Insert one document into the collection
 food_item = {

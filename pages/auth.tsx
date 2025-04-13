@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 export default function Auth() {
@@ -6,6 +6,13 @@ export default function Auth() {
   const [password, setPassword] = useState('');
   const [token, setToken] = useState('');
 
+  // ✅ Load token from localStorage on page load
+  useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+    if (storedToken) setToken(storedToken);
+  }, []);
+
+  // ✅ Handle sign-up
   const handleSignUp = async () => {
     try {
       const response = await axios.post('/api/auth/signup', { email, password });
@@ -15,10 +22,13 @@ export default function Auth() {
     }
   };
 
+  // ✅ Handle sign-in and save token
   const handleSignIn = async () => {
     try {
       const response = await axios.post('/api/auth/signin', { email, password });
-      setToken(response.data.token);
+      const token = response.data.token;
+      setToken(token);
+      localStorage.setItem('token', token); // store for future use
       alert('Signed in successfully');
     } catch (error) {
       alert('Error signing in');
@@ -42,7 +52,13 @@ export default function Auth() {
       />
       <button onClick={handleSignUp}>Sign Up</button>
       <button onClick={handleSignIn}>Sign In</button>
-      {token && <p>Token: {token}</p>}
+
+      {token && (
+        <div>
+          <p>✅ Logged in</p>
+          <p>Token: {token}</p>
+        </div>
+      )}
     </div>
   );
 }
