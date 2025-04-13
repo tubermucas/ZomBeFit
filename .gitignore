@@ -43,3 +43,9 @@ benv/
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# node_modules
+node_modules
+
+#next.js build output
+.next
