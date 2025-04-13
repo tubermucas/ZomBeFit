@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from google import genai
 from google.genai import types
 
-GEMINI_API_KEY= "AIzaSyDYwC1ZSauaI6r6RuxXLNc8zn42gVkynwI"
+GEMINI_API_KEY= #"AIzaSyDYwC1ZSauaI6r6RuxXLNc8zn42gVkynwI"
 #genai.configure(api_key=GEMINI_API_KEY)
 #model = genai.GenerativeModel("gemini-pro")
 client = genai.Client(api_key=GEMINI_API_KEY)
