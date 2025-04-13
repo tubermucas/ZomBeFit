@@ -69,7 +69,7 @@ funny: true, // Boolean value for humor
 
 // Fetch AI suggestions when the component mounts
 useEffect(() => {
-fetchAiSuggestion();
+ fetchAiSuggestion();  //UNCOMMENT THIS LINE TO FETCH SUGGESTIONS FROM AI
 }, []);
 
 return (

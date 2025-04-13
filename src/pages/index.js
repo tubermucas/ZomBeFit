@@ -1,37 +1,23 @@
-import React, { useEffect, useState, useRef } from "react";
-import { Bar, Line, Pie } from "react-chartjs-2";
+import React from "react";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement, PointElement, LineElement } from "chart.js";
 import CalChart from "./calchart"; 
 import AiChat from "./aichat";
 import Navbar from "./navbar";
+import APPLEPIE from "./pie"; // Import MacroChart
+import LineChart from "./linechart"; // Import LineChart
+import { johnWeeklyData } from "./placeholderData"; // Import placeholder data
 
 // Register Chart.js components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement, PointElement, LineElement);
 
-  // Chart Data
-  const barChartData = {
-    labels: ["January", "February", "March", "April", "May"],
-    datasets: [
-      {
-        label: "Monthly Progress",
-        data: [10, 20, 30, 40, 50],
-        backgroundColor: "rgba(75, 192, 192, 0.6)",
-        borderColor: "rgba(75, 192, 192, 1)",
-        borderWidth: 1,
-      },
-    ],
-  };
-
-  const pieChartData = {
-    labels: ["Protein", "Carbs", "Fats"],
-    datasets: [
-      {
-        label: "Macronutrient Distribution",
-        data: [40, 35, 25],
-        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
-      },
-    ],
-  };
+function Dashboard() {
+  // Extract data from johnWeeklyData
+  const todayData = johnWeeklyData[0]; // Use the first day's data for John
+  const protein = todayData.proteinLogs[0].protein; // Protein in grams
+  const carbs = todayData.carbsLogs[0].carbs; // Carbs in grams
+  const fats = todayData.fatLogs[0].fat; // Fats in grams
+  const weightData = johnWeeklyData.map((day) => day.weight);
+  const weightLabels = johnWeeklyData.map((day) => day.dateCreated);
 
   const lineChartData = {
     labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
@@ -46,23 +32,19 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend,
     ],
   };
 
-function Dashboard() {
   return (
-        <Navbar>
-          <main className="p-4 min-h-screen pt-20">
-            <AiChat />
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-              <CalChart />
-            </div>
-            <div className="border-2 border-dashed border-gray-300 rounded-lg dark:border-gray-600 h-32 md:h-64">
-              <Pie data={pieChartData} />
-            </div>
-            <div className="border-2 border-dashed border-gray-300 rounded-lg dark:border-gray-600 h-32 md:h-64">
-              <Line data={lineChartData} />
-            </div>
-            <div className="border-2 border-dashed border-gray-300 rounded-lg dark:border-gray-600 h-32 md:h-64"></div>
-          </main>
-        </Navbar>
+    <Navbar>
+      <main className="p-4 min-h-screen pt-20">
+        <AiChat />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+          <CalChart />
+          <APPLEPIE protein={protein} carbs={carbs} fats={fats} />
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
+          <LineChart weightData={weightData} weightLabels={weightLabels} />
+        </div>
+      </main>
+    </Navbar>
   );
 }
 

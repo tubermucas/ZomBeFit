@@ -1,21 +1,24 @@
 import React from "react";
-import { Pie } from "react-chartjs-2";
+import { Line } from "react-chartjs-2";
 
-function APPLEPIE({ protein, carbs, fats }) {
+function LineChart({ weightData, weightLabels }) {
   return (
     <div className="p-4 bg-white rounded-lg shadow-md dark:bg-gray-800">
       <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 text-center">
-        Daily Macronutrient Distribution
+        Weight Progress
       </h2>
       <div className="h-64"> {/* Ensure consistent height */}
-        <Pie
+        <Line
           data={{
-            labels: ["Protein", "Carbs", "Fats"],
+            labels: weightLabels,
             datasets: [
               {
-                data: [protein, carbs, fats],
-                backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
-                hoverBackgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
+                label: "Weight Progress (lbs)",
+                data: weightData,
+                borderColor: "rgba(75, 192, 192, 1)",
+                backgroundColor: "rgba(75, 192, 192, 0.2)",
+                tension: 0.4,
+                fill: true,
               },
             ],
           }}
@@ -34,4 +37,4 @@ function APPLEPIE({ protein, carbs, fats }) {
   );
 }
 
-export default APPLEPIE;
+export default LineChart;

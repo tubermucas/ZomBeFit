@@ -4,7 +4,7 @@ import Navbar from "./navbar"; // Import Navbar component
 
 function ProfilePage({ userData }) {
   // Provide default values if userData or its properties are undefined
-  const currentGoal = userData?.fitnessGoals?.currentGoal || "Maintain weight";
+  const [currentGoal, setCurrentGoal] = useState(userData?.fitnessGoals?.currentGoal || "Maintain weight");
   const [targetWeight, setTargetWeight] = useState(userData?.fitnessGoals?.targetWeight || 0);
   const [targetBodyFat, setTargetBodyFat] = useState(userData?.fitnessGoals?.targetBodyFat || 0);
   const [weightProgress, setWeightProgress] = useState(0);

@@ -23,30 +23,32 @@ const data = [
 
 function CalChart() {
   return (
-    <div className="w-full h-96">
-      <h2 className="text-lg font-bold text-center mb-4">
+    <div className="p-4 bg-white rounded-lg shadow-md dark:bg-gray-800">
+      <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 text-center">
         Weekly Caloric Intake vs Burn
       </h2>
-      <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="day">
-            <Label value="Days of the Week" offset={-5} position="insideBottom" />
-          </XAxis>
-          <YAxis>
-            <Label
-              value="Calories"
-              angle={-90}
-              position="insideLeft"
-              style={{ textAnchor: "middle" }}
-            />
-          </YAxis>
-          <Tooltip />
-          <Legend />
-          <Bar dataKey="CaloriesIn" fill="#8884d8" name="Calories In" />
-          <Bar dataKey="CaloriesOut" fill="#82ca9d" name="Calories Out" />
-        </BarChart>
-      </ResponsiveContainer>
+      <div className="h-64"> {/* Ensure consistent height */}
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="day">
+              <Label value="Days of the Week" offset={-5} position="insideBottom" />
+            </XAxis>
+            <YAxis>
+              <Label
+                value="Calories"
+                angle={-90}
+                position="insideLeft"
+                style={{ textAnchor: "middle" }}
+              />
+            </YAxis>
+            <Tooltip />
+            <Legend />
+            <Bar dataKey="CaloriesIn" fill="#8884d8" name="Calories In" />
+            <Bar dataKey="CaloriesOut" fill="#82ca9d" name="Calories Out" />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 }
