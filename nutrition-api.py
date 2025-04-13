@@ -32,7 +32,6 @@ class NutritionLog(BaseModel):
     #user information
     _id: object #might not need?
     userId: str
-    
     gender: str
     age: float
     weight: float
@@ -44,8 +43,11 @@ class NutritionLog(BaseModel):
     carbsLogs: list[dict]
     calInLogs: list[dict]
     calOutLogs: list[dict]
-
+    #date
     dateCreated: Optional[datetime]
+    #auth
+    email: str
+    password: str
     
     #calculate the tdee
     @property
