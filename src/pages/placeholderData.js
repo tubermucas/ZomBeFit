@@ -11,6 +11,7 @@ const johnSunday = {
     "password": "password",
     "gender": "male",
     "age": 22,
+    "bodyFat": 20,
     "weight": 165,
     "height": 71,
     "activityLvl": "moderate",

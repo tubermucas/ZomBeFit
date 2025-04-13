@@ -1,5 +1,10 @@
-import "@/styles/globals.css";
+import React, { useState } from "react";
+import "../styles/globals.css";
 
-export default function App({ Component, pageProps }) {
-  return <Component {...pageProps} />;
+function MyApp({ Component, pageProps }) {
+  const [userData, setUserData] = useState(null); // Global state for user data
+
+  return <Component {...pageProps} userData={userData} setUserData={setUserData} />;
 }
+
+export default MyApp;
