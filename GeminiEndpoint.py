@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from google import genai
 from google.genai import types
 
-GEMINI_API_KEY= #"AIzaSyDYwC1ZSauaI6r6RuxXLNc8zn42gVkynwI"
+GEMINI_API_KEY= "AIzaSyDYwC1ZSauaI6r6RuxXLNc8zn42gVkynwI"
 #genai.configure(api_key=GEMINI_API_KEY)
 #model = genai.GenerativeModel("gemini-pro")
 client = genai.Client(api_key=GEMINI_API_KEY)
@@ -28,8 +28,8 @@ class UserInput(BaseModel):
 class UserData(BaseModel):
     protein: list[float]
     carbs: list[float]
-    fats: list[float]
-    calories: list[float]
+    fat: list[float]
+    calIn: list[float]
     funny: bool
 
 
@@ -71,8 +71,8 @@ def analyzeCaloriesTrend(user_data: UserData):
     #We will function call for each of the necessary Macronutrients, so we end up with 4 summaries for all the Macronutrients
     Protein_Summary = trendAnalysis(user_data.protein, "Protein")
     Carbohydrate_Summary = trendAnalysis(user_data.carbs, "Carbs") 
-    Fats_Summary = trendAnalysis(user_data.fats, "Fats")
-    Calories_Summary = trendAnalysis(user_data.calories, "Calories")
+    Fats_Summary = trendAnalysis(user_data.fat, "Fats")
+    Calories_Summary = trendAnalysis(user_data.calIn, "Calories")
     #We will combine all the summaries into a single string, which will be used for our prompt when we input into the AI
     prompt = Protein_Summary + "\n" + Carbohydrate_Summary + "\n" + Fats_Summary + "\n" + Calories_Summary
     system_instruction = "Can you summarize the following details in 5 sentences regarding my health but less numbers and more description: " + prompt
