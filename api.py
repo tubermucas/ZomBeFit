@@ -4,11 +4,13 @@
 
 #imports
 from flask import Flask, request, jsonify
-from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import os
 from dotenv import load_dotenv
 from algorithms import tdee
+from auth import auth, token_required
+from werkzeug.security import generate_password_hash
+from models import db, NutritionLog
 
 # Load environment variables
 load_dotenv()
@@ -16,54 +18,15 @@ load_dotenv()
 # Initialize Flask app
 app = Flask(__name__)
 
+# Register auth blueprint
+app.register_blueprint(auth, url_prefix='/auth')
+
 # Configure SQLAlchemy
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///nutrition.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Initialize SQLAlchemy
-db = SQLAlchemy(app)
-
-# Define the NutritionLog model
-class NutritionLog(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.String(50), unique=True, nullable=False)
-    gender = db.Column(db.String(10), nullable=False)
-    age = db.Column(db.Float, nullable=False)
-    weight = db.Column(db.Float, nullable=False)
-    height = db.Column(db.Float, nullable=False)
-    activity_level = db.Column(db.String(20), nullable=False)
-    fat_logs = db.Column(db.JSON)
-    protein_logs = db.Column(db.JSON)
-    carbs_logs = db.Column(db.JSON)
-    cal_in_logs = db.Column(db.JSON)
-    cal_out_logs = db.Column(db.JSON)
-    date_created = db.Column(db.DateTime, default=datetime.utcnow)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(120), nullable=False)
-
-    @property
-    def cal_out(self):
-        if self.gender and self.age and self.weight and self.height and self.activity_level:
-            return tdee(self.gender, self.age, self.weight, self.height, self.activity_level)
-        return None
-
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'user_id': self.user_id,
-            'gender': self.gender,
-            'age': self.age,
-            'weight': self.weight,
-            'height': self.height,
-            'activity_level': self.activity_level,
-            'fat_logs': self.fat_logs,
-            'protein_logs': self.protein_logs,
-            'carbs_logs': self.carbs_logs,
-            'cal_in_logs': self.cal_in_logs,
-            'cal_out_logs': self.cal_out_logs,
-            'date_created': self.date_created.isoformat() if self.date_created else None,
-            'email': self.email
-        }
+# Initialize SQLAlchemy with the app
+db.init_app(app)
 
 # Create database tables
 with app.app_context():
@@ -71,13 +34,19 @@ with app.app_context():
 
 # Get all logs
 @app.route('/logs', methods=['GET'])
-def read_all_logs():
+@token_required
+def read_all_logs(current_user):
     logs = NutritionLog.query.all()
     return jsonify([log.to_dict() for log in logs])
 
 # Get a specific log by user_id
 @app.route('/logs/<string:user_id>', methods=['GET'])
-def read_log(user_id):
+@token_required
+def read_log(current_user, user_id):
+    # Only allow users to access their own logs
+    if current_user.user_id != user_id:
+        return jsonify({'error': 'Unauthorized access'}), 403
+        
     log = NutritionLog.query.filter_by(user_id=user_id).first()
     if not log:
         return jsonify({'error': 'Log not found'}), 404
@@ -85,7 +54,8 @@ def read_log(user_id):
 
 # Add a new log
 @app.route('/logs', methods=['POST'])
-def add_log():
+@token_required
+def add_log(current_user):
     data = request.get_json()
     
     # Check if user_id already exists
@@ -93,6 +63,7 @@ def add_log():
     if existing_log:
         return jsonify({'error': 'User ID already exists'}), 400
     
+    #create a new log with the data
     new_log = NutritionLog(
         user_id=data['user_id'],
         gender=data['gender'],
@@ -106,41 +77,56 @@ def add_log():
         cal_in_logs=data.get('cal_in_logs', []),
         cal_out_logs=data.get('cal_out_logs', []),
         email=data['email'],
-        password=data['password']
+        password=generate_password_hash(data['password'])
     )
-    
+    #add the new log to the database    
     db.session.add(new_log)
+    #commit the changes to the database
     db.session.commit()
-    
+    #return the new log as json
     return jsonify(new_log.to_dict()), 201
 
 # Update a log
 @app.route('/logs/<string:user_id>', methods=['PUT'])
-def update_log(user_id):
+@token_required
+def update_log(current_user, user_id):
+    # Only allow users to update their own logs
+    if current_user.user_id != user_id:
+        return jsonify({'error': 'Unauthorized access'}), 403
+    #get the log from the database
     log = NutritionLog.query.filter_by(user_id=user_id).first()
+    #if the log is not found return a message
     if not log:
         return jsonify({'error': 'Log not found'}), 404
-    
+    #get the data from the request
     data = request.get_json()
-    
-    # Update fields
+    #update the fields  
     for key, value in data.items():
         if hasattr(log, key):
             setattr(log, key, value)
-    
+    #commit the changes to the database
     db.session.commit()
+    #return the updated log as json
     return jsonify(log.to_dict())
 
 # Delete a log
 @app.route('/logs/<string:user_id>', methods=['DELETE'])
-def delete_log(user_id):
+@token_required
+def delete_log(current_user, user_id):
+    # Only allow users to delete their own logs
+    if current_user.user_id != user_id:
+        return jsonify({'error': 'Unauthorized access'}), 403
+        
     log = NutritionLog.query.filter_by(user_id=user_id).first()
     if not log:
         return jsonify({'error': 'Log not found'}), 404
-    
+    #delete the log from the database   
     db.session.delete(log)
+    #commit the changes to the database
     db.session.commit()
+    #return a message
     return jsonify({'message': 'Log deleted'})
 
+#run the app using a main guard
 if __name__ == '__main__':
     app.run(debug=True)
