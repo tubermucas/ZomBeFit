@@ -23,8 +23,12 @@
 }
 
 body {
+  background-image: url("/jr-korpa-_ZNLoTRTEKs-unsplash.jpg")!important;
+  background-size: cover; /* Ensures the image covers the entire screen */
+  background-position: center; /* Centers the image */
+  background-repeat: no-repeat; /* Prevents the image from repeating */
+  background-attachment: fixed; /* Keeps the background fixed during scrolling */
   background: var(--background);
-  color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
 

@@ -1,9 +1,22 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useRouter } from "next/router";
 
 function Navbar({ children }) {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const userMenuRef = useRef(null);
+  const router = useRouter();
+
+  // Map routes to page names
+  const pageNames = {
+    "/": "Dashboard",
+    "/profile": "Profile",
+    "/login": "Login",
+    "/register": "Register",
+  };
+
+  // Get the current page name
+  const currentPageName = pageNames[router.pathname] || "Page";
 
   // Close user menu when clicking outside
   useEffect(() => {
@@ -60,11 +73,16 @@ function Navbar({ children }) {
             </a>
           </div>
 
+          {/* Display Current Page Name */}
+          <div className="text-lg text-center font-semibold text-gray-900 dark:text-white text-shadow-green-800 hover-shadow-6xl">
+            {currentPageName}
+          </div>
+
           {/* User Menu */}
           <div className="flex items-center relative" ref={userMenuRef}>
             <button
               onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-              className="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+              className="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600 hover:ring-4 hover:ring-gray-300 dark:hover:ring-gray-600"
               id="user-menu-button"
             >
               <span className="sr-only">Open user menu</span>
@@ -158,7 +176,7 @@ function Navbar({ children }) {
       </aside>
 
       {/* Main Content */}
-      <main >{children}</main>
+      <main>{children}</main>
     </div>
   );
 }

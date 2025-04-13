@@ -1,15 +1,32 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from pydantic import BaseModel
 from google import genai
 from google.genai import types
+from dotenv import load_dotenv
+import os
+from fastapi.middleware.cors import CORSMiddleware
 
-GEMINI_API_KEY= #"AIzaSyDYwC1ZSauaI6r6RuxXLNc8zn42gVkynwI"
+# Load environment variables from .env file
+load_dotenv()
+
+# Initialize FastAPI app
+app = FastAPI()
+
+# Middleware to allow CORS for all origins
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Replace "*" with specific origins like ["http://localhost:3000"]
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all HTTP methods (GET, POST, OPTIONS, etc.)
+    allow_headers=["*"],  # Allow all headers
+)
+
+# Set up the Gemini API client
+GEMINI_API_KEY= os.getenv("GEMINI_API_KEY")
 #genai.configure(api_key=GEMINI_API_KEY)
 #model = genai.GenerativeModel("gemini-pro")
 client = genai.Client(api_key=GEMINI_API_KEY)
 MODEL_ID = "gemini-2.5-pro-exp-03-25"   #"gemini-2.0-flash"
-
-app = FastAPI()
 
 #Whenever the user accesss the AI or endpoint, the user will be required to input their height, weight, age, gender, or option
 #option will always be a available, while the other fields could be empty
@@ -75,10 +92,10 @@ def analyzeCaloriesTrend(user_data: UserData):
     Calories_Summary = trendAnalysis(user_data.calIn, "Calories")
     #We will combine all the summaries into a single string, which will be used for our prompt when we input into the AI
     prompt = Protein_Summary + "\n" + Carbohydrate_Summary + "\n" + Fats_Summary + "\n" + Calories_Summary
-    system_instruction = "Can you summarize the following details in 5 sentences regarding my health but less numbers and more description: " + prompt
+    system_instruction = "Analyze my details and give me suggestions in 2 sentences to stay on track with my goal but less numbers and more description: " + prompt
     #We included a funny instruction, which will be used to make the AI more engaging and fun. To match with our zombie prompt
     if user_data.funny:
-        system_instruction = "Can you summarize the following details in 5 sentences regarding my health but less numbers and more description: " + prompt + " But make it funny, as if you are talking to a zombie."
+        system_instruction = "Analyze my details and give me suggestions in 2 sentences to stay on track with my goal but less numbers and more description: " + prompt + " make it funny, as if you are a zombie talking to a zombie."
     #funny_instruction = "Can you summarize the following details in 5 sentences regarding my health: " + context + " But make it funny, as if you are talking to a zombie."
 
 
@@ -92,7 +109,7 @@ def analyzeCaloriesTrend(user_data: UserData):
         config = chat_config
     )
     response = chat.send_message(prompt)
-    return response.text
+    return {"response":response.text}  # Return the response as JSON
 
 @app.post("/api/ai")
 def generateUserPlan(user: UserInput):
@@ -142,5 +159,5 @@ def generateUserPlan(user: UserInput):
 
 #Chat will be a list of all the previous prompts. "Send_message" will print the latest response from the lastest prompt
     response = chat.send_message(prompt)
-    return response.text
+    return {"response":response.text}  # Return the response as JSON
 
