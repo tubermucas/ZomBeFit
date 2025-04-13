@@ -1,170 +1,114 @@
-import React, { useEffect, useState, useRef } from "react";
+//import React from "react";
+import React, { useEffect, useRef, useState } from "react";
+import AiChat from "./aichat"; // Import AI suggestions component
+import Navbar from "./navbar"; // Import Navbar component
+
+function ProfilePage() {
+  // Example user data (replace with dynamic data from backend or API)
+  const userData = {
+    height: "5'8\"",
+    weight: 75, // Current weight in kg
+    bodyFat: 20, // Current body fat percentage
+    targetWeight: 70, // Target weight in kg
+    targetBodyFat: 15, // Target body fat percentage
+    currentGoal: "Lose weight", // Default goal
+  };
+
+  const [currentGoal, setCurrentGoal] = useState(userData.currentGoal);
 
 
-function Profile() {
-
-  // State for user menu
-  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-  // Ref for user menu
-  const userMenuRef = useRef(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
-        setIsUserMenuOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }
-  , [userMenuRef]);
+  // Calculate progress percentages
+  const weightProgress = Math.min(
+    ((userData.weight - userData.targetWeight) / (userData.weight - userData.targetWeight + 5)) * 100,
+    100
+  );
+  const bodyFatProgress = Math.min(
+    ((userData.bodyFat - userData.targetBodyFat) / (userData.bodyFat - userData.targetBodyFat + 5)) *
+      100,
+    100
+  );
 
   return (
-    <div className="antialiased bg-gray-50 dark:bg-gray-900">
-      {/* Navbar */}
-      <nav className="bg-white border-b border-gray-200 px-4 py-2.5 dark:bg-gray-800 dark:border-gray-700 fixed left-0 right-0 top-0 z-50">
-        <div className="flex flex-wrap justify-between items-center">
-          <div className="flex justify-start items-center">
-            <button
-              aria-controls="drawer-navigation"
-              className="p-2 mr-2 text-gray-600 rounded-lg cursor-pointer md:hidden hover:text-gray-900 hover:bg-gray-100 focus:ring-2 focus:ring-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-            >
-              {/* Hamburger Icon */}
-              <svg
-                aria-hidden="true"
-                className="w-6 h-6"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                  clipRule="evenodd"
-                ></path>
-              </svg>
-            </button>
-            <a href="/" className="flex items-center justify-between mr-4">
-              <img
-                src="/make_a_cartoon_fit_zombie_.png"// Logo Zombie?
-                className="mr-3 h-8"
-                alt="Logo"
-              />
-              <span className="self-center text-2xl font-semibold whitespace-nowrap text-green-700 shadow-6xl dark:text-white">
-                zomBefit
-              </span>
-            </a>
-            
-          </div>
-          {/* User Menu */}
-          <div className="flex items-center relative" ref={userMenuRef}>
-            <button 
-              onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-              className="flex mx-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-              id="user-menu-button"
-            >
-              <span className="sr-only">Open user menu</span>
-              <img
-                className="w-8 h-8 rounded-full"
-                img src="/1to1.png" // MONOKUMAAAto1.png
-                alt="User"
-              />
-            </button>
-            {/* Dropdown Menu */}
-            {isUserMenuOpen && (
-              <div 
-                className="absolute right-0 z-50 w-48 mt-40 bg-white rounded-md shadow-lg dark:bg-gray-800"
-                role="menu"
-                aria-labelledby="user-menu-button"
-                aria-orientation="vertical"
-                aria-haspopup="true"  
+    <Navbar>
+    <div className="p-4 bg-gray-100 dark:bg-gray-900 min-h-screen">
+      <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">Profile</h1>
 
-                >
+        {/* AI Suggestions Section */}
+        <AiChat />
 
-                <div className="py-1">
-                  <a
-                    href="/profile"
-                    className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                    role="menuitem"
-                  >
-                    Profile
-                  </a>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                    role="menuitem"
-                  >
-                    Settings
-                  </a>
-                  <a
-                    href="/login"
-                    className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                    role="menuitem"
-                  >
-                    Logout
+      {/* User Information */}
+      <div className="bg-white p-4 rounded-lg shadow-md dark:bg-gray-800">
+        <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">
+          User Information
+        </h2>
+        <p className="text-gray-700 dark:text-gray-300">Height: {userData.height}</p>
+        <p className="text-gray-700 dark:text-gray-300">Current Weight: {userData.weight} kg</p>
+        <p className="text-gray-700 dark:text-gray-300">Body Fat: {userData.bodyFat}%</p>
+        <p className="text-gray-700 dark:text-gray-300">
+          Target Weight: {userData.targetWeight} kg
+        </p>
+        <p className="text-gray-700 dark:text-gray-300">
+          Target Body Fat: {userData.targetBodyFat}%
+        </p>
 
-                  </a>
-                </div>
-              </div>
-            )}
+        {/* Current Goal Dropdown */}
+        <div className="mt-6">
+          <label
+            htmlFor="goal"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+          >
+            Current Goal:
+          </label>
+          <select
+            id="goal"
+            value={currentGoal}
+            onChange={(e) => setCurrentGoal(e.target.value)}
+            className="mt-1 block w-full px-4 py-2 border rounded-lg text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+          >
+            <option value="Lose weight">Lose weight</option>
+            <option value="Gain muscle">Gain muscle</option>
+            <option value="Maintain weight">Maintain weight</option>
+          </select>
           </div>
         </div>
-      </nav>
 
-      {/* Sidebar */}
-      <aside
-        id="drawer-navigation"
-        className="fixed top-0 left-0 z-40 w-64 h-screen pt-14 transition-transform -translate-x-full bg-white border-r border-gray-200 md:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
-        
-      >
-        <div className="overflow-y-auto py-5 px-3 h-full bg-white dark:bg-gray-800">
-          <ul className="space-y-2">
-            <li>
-              <a
-                href="#"
-                className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-              >
-                <svg
-                  aria-hidden="true"
-                  className="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
-                </svg>
-                <span className="ml-3">Overview</span>
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-              >
-                <svg
-                  aria-hidden="true"
-                  className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-                    clipRule="evenodd"
-                  ></path>
-                </svg>
-                <span className="ml-3">Authentication</span>
-              </a>
-            </li>
-          </ul>
+        {/* Progress Bars */}
+        <div className="mt-6">
+          <h2 className="text-lg font-semibold text-gray-800 dark:text-white">Progress</h2>
+
+          {/* Weight Progress */}
+          <div className="mt-4">
+            <p className="text-gray-700 dark:text-gray-300">Weight Progress:</p>
+            <div className="w-full bg-gray-200 rounded-full h-4 dark:bg-gray-700">
+              <div
+                className="bg-green-600 h-4 rounded-full"
+                style={{ width: `${weightProgress}%` }}
+              ></div>
+            </div>
+            <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+              {weightProgress.toFixed(1)}% to your goal weight
+            </p>
+          </div>
+
+          {/* Body Fat Progress */}
+          <div className="mt-4">
+            <p className="text-gray-700 dark:text-gray-300">Body Fat Progress:</p>
+            <div className="w-full bg-gray-200 rounded-full h-4 dark:bg-gray-700">
+              <div
+                className="bg-blue-600 h-4 rounded-full"
+                style={{ width: `${bodyFatProgress}%` }}
+              ></div>
+            </div>
+            <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+              {bodyFatProgress.toFixed(1)}% to your goal body fat percentage
+            </p>
+          </div>
         </div>
-        </aside>
-    </div>
+      </div>
+    </Navbar>
+
   );
 }
 
-export default Profile;
+
+export default ProfilePage;

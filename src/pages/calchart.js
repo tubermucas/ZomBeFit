@@ -1,0 +1,54 @@
+import React from "react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  Label,
+} from "recharts";
+
+const data = [
+  { day: "Sunday", CaloriesIn: 2000, CaloriesOut: 1800 },
+  { day: "Monday", CaloriesIn: 2200, CaloriesOut: 2000 },
+  { day: "Tuesday", CaloriesIn: 2100, CaloriesOut: 1900 },
+  { day: "Wednesday", CaloriesIn: 2300, CaloriesOut: 2100 },
+  { day: "Thursday", CaloriesIn: 2500, CaloriesOut: 2300 },
+  { day: "Friday", CaloriesIn: 2400, CaloriesOut: 2200 },
+  { day: "Saturday", CaloriesIn: 2600, CaloriesOut: 2400 },
+];
+
+function CalChart() {
+  return (
+    <div className="w-full h-96">
+      <h2 className="text-lg font-bold text-center mb-4">
+        Weekly Caloric Intake vs Burn
+      </h2>
+      <ResponsiveContainer width="100%" height="100%">
+        <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="day">
+            <Label value="Days of the Week" offset={-5} position="insideBottom" />
+          </XAxis>
+          <YAxis>
+            <Label
+              value="Calories"
+              angle={-90}
+              position="insideLeft"
+              style={{ textAnchor: "middle" }}
+            />
+          </YAxis>
+          <Tooltip />
+          <Legend />
+          <Bar dataKey="CaloriesIn" fill="#8884d8" name="Calories In" />
+          <Bar dataKey="CaloriesOut" fill="#82ca9d" name="Calories Out" />
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
+  );
+}
+
+export default CalChart;

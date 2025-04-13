@@ -1,179 +1,68 @@
 import React, { useEffect, useState, useRef } from "react";
+import { Bar, Line, Pie } from "react-chartjs-2";
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement, PointElement, LineElement } from "chart.js";
+import CalChart from "./calchart"; 
+import AiChat from "./aichat";
+import Navbar from "./navbar";
 
+// Register Chart.js components
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement, PointElement, LineElement);
+
+  // Chart Data
+  const barChartData = {
+    labels: ["January", "February", "March", "April", "May"],
+    datasets: [
+      {
+        label: "Monthly Progress",
+        data: [10, 20, 30, 40, 50],
+        backgroundColor: "rgba(75, 192, 192, 0.6)",
+        borderColor: "rgba(75, 192, 192, 1)",
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const pieChartData = {
+    labels: ["Protein", "Carbs", "Fats"],
+    datasets: [
+      {
+        label: "Macronutrient Distribution",
+        data: [40, 35, 25],
+        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
+      },
+    ],
+  };
+
+  const lineChartData = {
+    labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
+    datasets: [
+      {
+        label: "Weight Progress",
+        data: [75, 74, 73, 72],
+        fill: false,
+        borderColor: "rgba(75, 192, 192, 1)",
+        tension: 0.1,
+      },
+    ],
+  };
 
 function Dashboard() {
-
-  // State for user menu
-  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-  // Ref for user menu
-  const userMenuRef = useRef(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
-        setIsUserMenuOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }
-  , [userMenuRef]);
-
   return (
-    <div className="antialiased bg-gray-50 dark:bg-gray-900">
-      {/* Navbar */}
-      <nav className="bg-white border-b border-gray-200 px-4 py-2.5 dark:bg-gray-800 dark:border-gray-700 fixed left-0 right-0 top-0 z-50">
-        <div className="flex flex-wrap justify-between items-center">
-          <div className="flex justify-start items-center">
-            <button
-              aria-controls="drawer-navigation"
-              className="p-2 mr-2 text-gray-600 rounded-lg cursor-pointer md:hidden hover:text-gray-900 hover:bg-gray-100 focus:ring-2 focus:ring-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-            >
-              {/* Hamburger Icon */}
-              <svg
-                aria-hidden="true"
-                className="w-6 h-6"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                  clipRule="evenodd"
-                ></path>
-              </svg>
-            </button>
-            <a href="/" className="flex items-center justify-between mr-4">
-              <img
-                src="/make_a_cartoon_fit_zombie_.png"// Logo Zombie?
-                className="mr-3 h-8"
-                alt="Logo"
-              />
-              <span className="self-center text-2xl font-semibold whitespace-nowrap text-green-700 shadow-6xl dark:text-white">
-                zomBefit
-              </span>
-            </a>
-            
-          </div>
-          {/* User Menu */}
-          <div className="flex items-center relative" ref={userMenuRef}>
-            <button 
-              onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-              className="flex mx-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-              id="user-menu-button"
-            >
-              <span className="sr-only">Open user menu</span>
-              <img
-                className="w-8 h-8 rounded-full"
-                img src="/1to1.png" // MONOKUMAAAto1.png
-                alt="User"
-              />
-            </button>
-            {/* Dropdown Menu */}
-            {isUserMenuOpen && (
-              <div 
-                className="absolute right-0 z-50 w-48 mt-40 bg-white rounded-md shadow-lg dark:bg-gray-800"
-                role="menu"
-                aria-labelledby="user-menu-button"
-                aria-orientation="vertical"
-                aria-haspopup="true"  
-
-                >
-
-                <div className="py-1">
-                  <a
-                    href="/profile"
-                    className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                    role="menuitem"
-                  >
-                    Profile
-                  </a>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                    role="menuitem"
-                  >
-                    Settings
-                  </a>
-                  <a
-                    href="/login"
-                    className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                    role="menuitem"
-                  >
-                    Logout
-
-                  </a>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      </nav>
-
-      {/* Sidebar */}
-      <aside
-        id="drawer-navigation"
-        className="fixed top-0 left-0 z-40 w-64 h-screen pt-14 transition-transform -translate-x-full bg-white border-r border-gray-200 md:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
-        
-      >
-        <div className="overflow-y-auto py-5 px-3 h-full bg-white dark:bg-gray-800">
-          <ul className="space-y-2">
-            <li>
-              <a
-                href="#"
-                className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-              >
-                <svg
-                  aria-hidden="true"
-                  className="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
-                </svg>
-                <span className="ml-3">Overview</span>
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-              >
-                <svg
-                  aria-hidden="true"
-                  className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-                    clipRule="evenodd"
-                  ></path>
-                </svg>
-                <span className="ml-3">Authentication</span>
-              </a>
-            </li>
-          </ul>
-        </div>
-      </aside>
-
-      {/* Main Content */}
-      <main className="p-4 md:ml-64 min-h-screen pt-20">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-          <div className="border-2 border-dashed border-gray-300 rounded-lg dark:border-gray-600 h-32 md:h-64"></div>
-          <div className="border-2 border-dashed border-gray-300 rounded-lg dark:border-gray-600 h-32 md:h-64"></div>
-          <div className="border-2 border-dashed border-gray-300 rounded-lg dark:border-gray-600 h-32 md:h-64"></div>
-          <div className="border-2 border-dashed border-gray-300 rounded-lg dark:border-gray-600 h-32 md:h-64"></div>
-        </div>
-      </main>
-    </div>
+        <Navbar>
+          <main className="p-4 min-h-screen pt-20">
+            <AiChat />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+              <CalChart />
+            </div>
+            <div className="border-2 border-dashed border-gray-300 rounded-lg dark:border-gray-600 h-32 md:h-64">
+              <Pie data={pieChartData} />
+            </div>
+            <div className="border-2 border-dashed border-gray-300 rounded-lg dark:border-gray-600 h-32 md:h-64">
+              <Line data={lineChartData} />
+            </div>
+            <div className="border-2 border-dashed border-gray-300 rounded-lg dark:border-gray-600 h-32 md:h-64"></div>
+          </main>
+        </Navbar>
   );
 }
 
