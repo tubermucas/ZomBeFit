@@ -1,5 +1,6 @@
 import React from "react";
 
+
 function Register() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
@@ -70,8 +71,8 @@ function Register() {
               Height
             </label>
             <input
-              type="password"
-              id="password"
+              type="number"
+              id="height"
               className="mt-1 block w-full px-4 py-2 border rounded-lg text-gray-900 bg-gray-50 dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:ring-primary-500 focus:border-primary-500"
               placeholder="72 in"
               required
@@ -87,8 +88,8 @@ function Register() {
             Weight
             </label>
             <input
-              type="password"
-              id="password"
+              type="number"
+              id="weight"
               className="mt-1 block w-full px-4 py-2 border rounded-lg text-gray-900 bg-gray-50 dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:ring-primary-500 focus:border-primary-500"
               placeholder="185"
               required
