@@ -1,6 +1,7 @@
 import React from "react";
 import { Line } from "react-chartjs-2";
 
+// Import Chart.js components
 function LineChart({ weightData, weightLabels }) {
   return (
     <div className="p-4 bg-white rounded-lg shadow-md dark:bg-gray-800">

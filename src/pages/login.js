@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { johnWeeklyData, sarahWeeklyData } from "./placeholderData";
 
+// This is a simple login form component using React and Next.js
 function Login({ setUserData }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
 
+  // Handle login form submission
   const handleLogin = (e) => {
     e.preventDefault();
 
@@ -23,6 +25,7 @@ function Login({ setUserData }) {
     }
   };
 
+  // Render the login form
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
       <div className="w-full max-w-md bg-white rounded-lg shadow-md dark:bg-gray-800 p-6 space-y-4">

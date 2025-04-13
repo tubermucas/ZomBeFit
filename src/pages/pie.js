@@ -1,6 +1,7 @@
 import React from "react";
 import { Pie } from "react-chartjs-2";
 
+// Import Chart.js components
 function APPLEPIE({ protein, carbs, fats }) {
   return (
     <div className="p-4 bg-white rounded-lg shadow-md dark:bg-gray-800">

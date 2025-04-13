@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/router";
 
+/// Navbar component
 function Navbar({ children }) {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -26,12 +27,14 @@ function Navbar({ children }) {
       }
     };
 
+    // Add event listener to document
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
+  // Close sidebar when clicking outside
   return (
     <div className="antialiased bg-gray-50 dark:bg-gray-900">
       {/* Navbar */}

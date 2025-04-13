@@ -10,9 +10,11 @@ function ProfilePage({ userData }) {
   const [weightProgress, setWeightProgress] = useState(0);
   const [bodyFatProgress, setBodyFatProgress] = useState(0);
 
+  // Function to recalculate progress based on user data and goals
   const recalculateProgress = () => {
     let newWeightProgress = 0;
 
+    // Calculate weight progress based on the current goal
     if (currentGoal === "Lose weight") {
       newWeightProgress = Math.min(
         ((userData?.weight - targetWeight) / userData?.weight) * 100,
@@ -30,6 +32,7 @@ function ProfilePage({ userData }) {
       );
     }
 
+    // Calculate body fat progress based on the current goal
     const newBodyFatProgress = Math.min(
       ((userData?.bodyFat - targetBodyFat) / userData?.bodyFat) * 100,
       100
@@ -45,6 +48,7 @@ function ProfilePage({ userData }) {
     }
   }, [currentGoal, targetWeight, targetBodyFat, userData]);
 
+  // Check if userData is available, if not, show a message to log in
   if (!userData) {
     return (
       <div className="p-4 bg-gray-100 dark:bg-gray-900 min-h-screen flex items-center justify-center">
@@ -55,6 +59,7 @@ function ProfilePage({ userData }) {
     );
   }
 
+  // Render the profile page with user data and progress bars
   return (
     <Navbar>
       <div className="p-4 bg-gray-100 dark:bg-gray-900 min-h-screen">

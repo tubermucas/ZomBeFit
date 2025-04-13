@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 
-
+// This is a simple registration form component using React and Next.js
 function Register() {
   const router = useRouter();
   const [formData, setFormData] = useState({
@@ -12,6 +12,7 @@ function Register() {
     weight: "",
   });
 
+  // Handle input changes and update the state
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData((prevData) => ({
@@ -20,6 +21,7 @@ function Register() {
     }));
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
@@ -27,6 +29,7 @@ function Register() {
       return;
     }
 
+    // Perform registration logic here (e.g., API call)
     try {
       const response = await fetch("/api/register", {
         method: "POST",
@@ -46,6 +49,7 @@ function Register() {
     }
   };
 
+  // Render the registration form
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
       <div className="w-full max-w-md bg-white rounded-lg shadow-md dark:bg-gray-800 p-6 space-y-4">

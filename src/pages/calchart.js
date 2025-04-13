@@ -11,6 +11,7 @@ import {
   Label,
 } from "recharts";
 
+// Sample data for the chart
 const data = [
   { day: "Sunday", CaloriesIn: 2000, CaloriesOut: 1800 },
   { day: "Monday", CaloriesIn: 2200, CaloriesOut: 2000 },
@@ -21,6 +22,7 @@ const data = [
   { day: "Saturday", CaloriesIn: 2600, CaloriesOut: 2400 },
 ];
 
+// Function to calculate the total calories burned
 function CalChart() {
   return (
     <div className="p-4 bg-white rounded-lg shadow-md dark:bg-gray-800">

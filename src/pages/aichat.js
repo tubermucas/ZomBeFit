@@ -2,11 +2,13 @@ import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion"; 
 
+// Importing Framer Motion for animations
 const AiChat = () => {
 const [aiSuggestion, setAiSuggestion] = useState(
 "Fetching Zombie Daddy suggestions..."
 );
 
+// State to track the explosion animation
 const [isExploding, setIsExploding] = useState(false); // State to track explosion
 let holdTimeout; // Timeout to detect long press\
 
@@ -62,6 +64,7 @@ funny: true, // Boolean value for humor
     }, 2000); // 2 seconds hold triggers the explosion
   };
 
+  // Function to handle pointer up (release)
   const handlePointerUp = () => {
     clearTimeout(holdTimeout); // Clear the timeout if released early
     setIsExploding(false); // Reset explosion state
@@ -72,6 +75,7 @@ useEffect(() => {
  //fetchAiSuggestion();  //UNCOMMENT THIS LINE TO FETCH SUGGESTIONS FROM AI
 }, []);
 
+// Cleanup function to clear the timeout if the component unmounts
 return (
 <div>
 {/* AI Suggestions Box */}

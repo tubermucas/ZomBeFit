@@ -32,6 +32,7 @@ function Dashboard() {
     ],
   };
 
+  // Create a function to calculate the total calories burned
   return (
     <Navbar>
       <main className="p-4 min-h-screen pt-20">
