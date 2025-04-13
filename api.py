@@ -63,6 +63,7 @@ def add_log(current_user):
     if existing_log:
         return jsonify({'error': 'User ID already exists'}), 400
     
+    #create a new log with the data
     new_log = NutritionLog(
         user_id=data['user_id'],
         gender=data['gender'],
@@ -78,10 +79,11 @@ def add_log(current_user):
         email=data['email'],
         password=generate_password_hash(data['password'])
     )
-    
+    #add the new log to the database    
     db.session.add(new_log)
+    #commit the changes to the database
     db.session.commit()
-    
+    #return the new log as json
     return jsonify(new_log.to_dict()), 201
 
 # Update a log
@@ -91,19 +93,20 @@ def update_log(current_user, user_id):
     # Only allow users to update their own logs
     if current_user.user_id != user_id:
         return jsonify({'error': 'Unauthorized access'}), 403
-        
+    #get the log from the database
     log = NutritionLog.query.filter_by(user_id=user_id).first()
+    #if the log is not found return a message
     if not log:
         return jsonify({'error': 'Log not found'}), 404
-    
+    #get the data from the request
     data = request.get_json()
-    
-    # Update fields
+    #update the fields  
     for key, value in data.items():
         if hasattr(log, key):
             setattr(log, key, value)
-    
+    #commit the changes to the database
     db.session.commit()
+    #return the updated log as json
     return jsonify(log.to_dict())
 
 # Delete a log
@@ -117,10 +120,13 @@ def delete_log(current_user, user_id):
     log = NutritionLog.query.filter_by(user_id=user_id).first()
     if not log:
         return jsonify({'error': 'Log not found'}), 404
-    
+    #delete the log from the database   
     db.session.delete(log)
+    #commit the changes to the database
     db.session.commit()
+    #return a message
     return jsonify({'message': 'Log deleted'})
 
+#run the app using a main guard
 if __name__ == '__main__':
     app.run(debug=True)

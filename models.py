@@ -1,9 +1,12 @@
+#imports for the models
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from algorithms import tdee
 
+#initialize the database
 db = SQLAlchemy()
 
+#create the nutrition log model
 class NutritionLog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.String(50), unique=True, nullable=False)
@@ -21,12 +24,14 @@ class NutritionLog(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
 
+    #calculate the cal_out use tdee function
     @property
     def cal_out(self):
         if self.gender and self.age and self.weight and self.height and self.activity_level:
             return tdee(self.gender, self.age, self.weight, self.height, self.activity_level)
         return None
-
+    
+    #convert the model to a dictionary
     def to_dict(self):
         return {
             'id': self.id,
