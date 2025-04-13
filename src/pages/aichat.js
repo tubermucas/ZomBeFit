@@ -69,7 +69,7 @@ funny: true, // Boolean value for humor
 
 // Fetch AI suggestions when the component mounts
 useEffect(() => {
- fetchAiSuggestion();  //UNCOMMENT THIS LINE TO FETCH SUGGESTIONS FROM AI
+ //fetchAiSuggestion();  //UNCOMMENT THIS LINE TO FETCH SUGGESTIONS FROM AI
 }, []);
 
 return (
@@ -99,7 +99,7 @@ return (
       onPointerUp={handlePointerUp} // Reset on release
     />
   <h1 className="text-xl font-bold text-blue-800 dark:text-blue-200">
-    Click and hold Daddy for a surprise!
+    Click and hold Zombie Daddy for a surprise!
   </h1>
 </div>
   <h2 className="text-lg font-semibold text-blue-800 dark:text-blue-200 mb-2">
